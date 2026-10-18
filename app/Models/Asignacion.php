@@ -1,10 +1,13 @@
 <?php
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Asignacion extends Model
 {
+    protected $table = 'asignaciones';
+
     protected $fillable = [
         'grupo_id',
         'profesor_id',
