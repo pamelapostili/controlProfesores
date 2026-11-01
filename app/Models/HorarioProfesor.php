@@ -13,6 +13,7 @@ class HorarioProfesor extends Model
         'profesor_id',
         'dia',
         'materia',
+        'grupo',
         'hora_inicio',
         'hora_fin',
         'edificio',

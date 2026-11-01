@@ -146,6 +146,20 @@ class ControlProfesoresSeeder extends Seeder
                 ->where('email', 'taiga@gmail.com')
                 ->first();
 
+// Relacionar cada cuenta con su profesor correspondiente.
+
+DB::table('users')
+    ->where('email', 'pugberto@gmail.com')
+    ->update([
+        'profesor_id' => $pugberto->id,
+    ]);
+
+DB::table('users')
+    ->where('email', 'taiga@gmail.com')
+    ->update([
+        'profesor_id' => $taiga->id,
+    ]);
+
             // 5. MATERIAS
             DB::table('materias')->updateOrInsert(
                 ['clave' => 'MAT101'],

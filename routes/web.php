@@ -27,6 +27,27 @@ Route::middleware('auth')->group(function () {
         'index'
     ])->middleware('role:profesor')->name('profesor.panel');
 
+Route::patch(
+    '/profesor/notificaciones/{id}/leer',
+    function (Illuminate\Http\Request $request, string $id) {
+
+        $notificacion = $request->user()
+            ->notifications()
+            ->findOrFail($id);
+
+        $notificacion->markAsRead();
+
+        return back()->with('success', 'Notificación marcada como leída.');
+    }
+)->middleware('role:profesor')
+  ->name('profesor.notificaciones.leer');
+
+    Route::patch('/profesor/perfil', [
+        ProfesorPanelController::class,
+        'actualizar'
+    ])->middleware('role:profesor')
+    ->name('profesor.perfil.actualizar');
+
     // Directorio de profesores para alumnos.
     Route::get('/profesores', [
         ProfesorController::class,

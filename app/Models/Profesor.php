@@ -2,9 +2,13 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
 
 class Profesor extends Model
 {
+    use Notifiable;
     protected $table = 'profesores';
 
     protected $fillable = [
@@ -77,5 +81,10 @@ class Profesor extends Model
     public function asignaciones(): HasMany
     {
         return $this->hasMany(Asignacion::class);
+    }
+
+    public function usuario(): HasOne
+    {
+        return $this->hasOne(User::class);
     }
 }
