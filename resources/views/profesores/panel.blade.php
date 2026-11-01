@@ -1509,6 +1509,34 @@
                                                >
                                     </div>
 
+<div class="col-md-6">
+    <label class="form-label">Día</label>
+
+    <select name="horarios[{{ $i }}][dia]"
+            class="form-select"
+            required>
+
+        <option value="">Selecciona un día</option>
+
+        @foreach([
+            'Lunes',
+            'Martes',
+            'Miércoles',
+            'Jueves',
+            'Viernes',
+            'Sábado'
+        ] as $dia)
+
+            <option value="{{ $dia }}"
+                {{ old("horarios.$i.dia", data_get($horario, 'dia')) === $dia ? 'selected' : '' }}>
+                {{ $dia }}
+            </option>
+
+        @endforeach
+
+    </select>
+</div>
+
                                     <div class="col-md-6">
                                         <label class="form-label">Grupo</label>
                                         <input
@@ -1635,7 +1663,23 @@ document.addEventListener('DOMContentLoaded', function () {
                     <input type="text" name="horarios[${i}][materia]"
                            class="form-control" maxlength="255" >
                 </div>
+<div class="col-md-6">
+    <label class="form-label">Día</label>
 
+    <select name="horarios[${i}][dia]"
+            class="form-select"
+            required>
+
+        <option value="">Selecciona un día</option>
+        <option value="Lunes">Lunes</option>
+        <option value="Martes">Martes</option>
+        <option value="Miércoles">Miércoles</option>
+        <option value="Jueves">Jueves</option>
+        <option value="Viernes">Viernes</option>
+        <option value="Sábado">Sábado</option>
+
+    </select>
+</div>
             <div class="col-md-6">
                 <label class="form-label">Grupo</label>
                 <input

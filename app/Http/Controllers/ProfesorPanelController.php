@@ -125,6 +125,12 @@ public function index(Request $request)
                 'distinct',
             ],
 
+'horarios.*.dia' => [
+    'required',
+    'string',
+    'in:Lunes,Martes,Miércoles,Jueves,Viernes,Sábado',
+],
+
             'horarios.*.materia' => [
                 'sometimes',
                 'nullable',
@@ -199,6 +205,7 @@ public function index(Request $request)
     if (empty($horario['id'])) {
 
         $camposObligatorios = [
+            'dia' => 'Debes seleccionar un día.',
             'materia' => 'La materia es obligatoria.',
             'grupo' => 'El grupo es obligatorio.',
             'hora_inicio' => 'La hora de inicio es obligatoria.',
@@ -293,6 +300,7 @@ public function index(Request $request)
                 ->delete();
 
             // 4. Actualizar los horarios existentes y crear los nuevos.
+// 4. Actualizar los horarios existentes y crear los nuevos.
 foreach ($horarios as $horario) {
 
     $id = $horario['id'] ?? null;
@@ -304,6 +312,13 @@ foreach ($horarios as $horario) {
         continue;
     }
 
+    // Comprobar que el día esté presente.
+    if (blank($horario['dia'] ?? null)) {
+        throw ValidationException::withMessages([
+            'horarios' => 'Debes seleccionar el día de cada horario.',
+        ]);
+    }
+
     if ($id) {
 
         // Buscar el horario perteneciente al profesor.
@@ -311,13 +326,29 @@ foreach ($horarios as $horario) {
             ->whereKey($id)
             ->firstOrFail();
 
-        // Actualizar únicamente los campos enviados.
-        $horarioExistente->update($horario);
+        // Actualizar incluyendo el día.
+        $horarioExistente->update([
+            'dia' => $horario['dia'],
+            'materia' => $horario['materia'] ?? null,
+            'grupo' => $horario['grupo'] ?? null,
+            'edificio' => $horario['edificio'] ?? null,
+            'aula' => $horario['aula'] ?? null,
+            'hora_inicio' => $horario['hora_inicio'] ?? null,
+            'hora_fin' => $horario['hora_fin'] ?? null,
+        ]);
 
     } else {
 
-        // Crear un horario nuevo.
-        $profesor->horarios()->create($horario);
+        // Crear un horario nuevo incluyendo el día.
+        $profesor->horarios()->create([
+            'dia' => $horario['dia'],
+            'materia' => $horario['materia'],
+            'grupo' => $horario['grupo'],
+            'edificio' => $horario['edificio'] ?? null,
+            'aula' => $horario['aula'] ?? null,
+            'hora_inicio' => $horario['hora_inicio'],
+            'hora_fin' => $horario['hora_fin'],
+        ]);
     }
 }
         });
